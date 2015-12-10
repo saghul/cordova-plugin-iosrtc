@@ -24,6 +24,13 @@ class iosrtcPlugin : CDVPlugin {
 	override init(webView: UIWebView) {
 		NSLog("iosrtcPlugin#init()")
 
+                // Initialize AVAudioSession to allow mixing (libwebrtc doesn't do that)
+		do {
+			try AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayAndRecord, withOptions: AVAudioSessionCategoryOptions.MixWithOthers)
+		} catch {
+                        NSLog("iosrtcPlugin#init() | ERROR \(error)")
+                }
+
 		// Initialize DTLS stuff.
 		RTCPeerConnectionFactory.initializeSSL()
 
